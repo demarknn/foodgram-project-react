@@ -9,6 +9,7 @@ class Tag(models.Model):
     name = models.CharField(
         max_length=200,
         null=False,
+        unique=True,
         verbose_name="Имя тега"
         )
     color = models.CharField(
@@ -28,6 +29,7 @@ class Ingredient(models.Model):
     name = models.CharField(
         max_length=200,
         null=False,
+        unique=True,
         verbose_name="Ингридиент"
         )
     quantity = models.IntegerField(verbose_name="Количество")
@@ -41,7 +43,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(unique=True)
     description = models.TextField()
     cooktime = models.IntegerField()

@@ -1,7 +1,7 @@
 from rest_framework.permissions import (
     BasePermission, SAFE_METHODS)
 
-from reviews.models import UserRole
+#from food.models import User
 
 
 class AdminAuthorOrReadOnly(BasePermission):
@@ -15,7 +15,6 @@ class AdminAuthorOrReadOnly(BasePermission):
         return (
             request.method in SAFE_METHODS
             or obj.author == request.user
-            or request.user.role == UserRole.ADMIN
         )
 
 

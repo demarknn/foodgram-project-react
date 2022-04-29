@@ -3,15 +3,20 @@ from django.urls import include, path
 
 from .views import (
     IngredientViewSet, RecipeViewSet,
-    TagViewSet
+    TagViewSet, UsersViewSet
 )
 
 v1_router = SimpleRouter()
-v1_router.register('ingredient', IngredientViewSet)
-v1_router.register('recipe', RecipeViewSet)
-v1_router.register('tag', TagViewSet)
+v1_router.register('ingredients', IngredientViewSet)
+v1_router.register('recipes', RecipeViewSet)
+v1_router.register('tags', TagViewSet)
+v1_router.register(
+    'users',
+    UsersViewSet,
+    basename='users'
+)
 
 urlpatterns = [
-    path('v1/', include(v1_router.urls)),
-
+    path('', include(v1_router.urls)),
+    #path('v1/auth/token/signup', signup, name='signup'),
 ]
