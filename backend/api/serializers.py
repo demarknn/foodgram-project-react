@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from food.models import Ingredient, Tag, Recipe, User
+from rest_framework.validators import UniqueValidator
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -21,10 +23,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UsersSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
+# class UsersSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = '__all__'
 
 
 class UsersMeSerializer(serializers.ModelSerializer):
@@ -36,44 +38,35 @@ class UsersMeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RegistrationSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
-    email = serializers.EmailField(required=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
-    password = serializers.CharField(write_only=True)
+class RegistrationSerializer(UserCreateSerializer):
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(
+        validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'first_name', 'last_name', 'password']
-
-    # def create(self, validated_data):
-    #     user = super().create(validated_data)
-    #     user.set_password(validated_data['password'])
-    #     user.save()
-    #     return user
-
-    # def update(self, instance, validated_data):
-    #     user = super().update(instance, validated_data)
-    #     try:
-    #         user.set_password(validated_data['password'])
-    #         user.save()
-    #     except KeyError:
-    #         pass
-    #     return user
+        fields = (
+            'email', 'id', 'password', 'username', 'first_name', 'last_name')
+        extra_kwargs = {
+            'email': {'required': True},
+            'username': {'required': True},
+            'password': {'required': True},
+            'first_name': {'required': True},
+            'last_name': {'required': True},
+        }
 
 
+class UsersSerializer(UserSerializer):
+    #is_subscribed = serializers.SerializerMethodField()
 
-    def validate_username(self, value):
-        if 'me' == value.lower():
-            raise serializers.ValidationError(
-                "Нельзя создавать пользователя ME"
-            )
-        if value == '':
-            raise serializers.ValidationError("Нужно заполнить имя")
-        return value
+    class Meta:
+        model = User
+        fields = (
+            'email', 'id', 'username', 'first_name', 'last_name')
 
-    def validate_email(self, value):
-        if value == '':
-            raise serializers.ValidationError("Нужно заполнить почту")
-        return value
+    # class Meta:
+    #     model = User
+    #     fields = (
+    #         'email', 'id', 'username', 'first_name', 'last_name',
+    #         'is_subscribed')

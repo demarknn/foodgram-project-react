@@ -9,5 +9,6 @@ urlpatterns = [
     path('api/', include(api.urls)),
     # path('api/', include('djoser.urls')),
     # path('api/', include('djoser.urls.jwt')),
-    path('api/auth/token/login/', views.obtain_auth_token),
+    # path('api/auth/token/login/', views.obtain_auth_token),
+    path('api/auth/', include('djoser.urls.authtoken')),
 ]
