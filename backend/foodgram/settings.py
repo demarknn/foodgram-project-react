@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from datetime import timedelta
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +20,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-# AUTH_USER_MODEL = 'food.User'
+AUTH_USER_MODEL = 'users.User'
 
 # Application definition
 
@@ -31,11 +31,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'recipes.apps.RecipesConfig',
+    'django_filters',
+    'users.apps.UsersConfig',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters',
-    'api.apps.ApiConfig',
-    'food.apps.FoodConfig',
     'djoser',
 ]
 
@@ -101,36 +101,26 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend'
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 6,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': timedelta(days=100),
-#     'AUTH_HEADER_TYPES': ('Bearer',),
-# }
 
 DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'LOGIN_FIELD': 'email',
+    'SERIALIZERS': {},
     'HIDE_USERS': False,
-    'SERIALIZERS': {
-        'user_create': 'api.serializers.RegistrationSerializer',
-        'user': 'api.serializers.UsersSerializer',
-        'current_user': 'api.serializers.UsersSerializer',
-    },
-    # 'PERMISSIONS': {
-    #     'user': ('rest_framework.permissions.IsAuthenticated',),
-    #     'user_list': ('rest_framework.permissions.AllowAny',)
-    # }
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.IsAuthenticated'],
+    }
 }
 
 
@@ -156,5 +146,3 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-
