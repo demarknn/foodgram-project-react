@@ -1,13 +1,16 @@
 from django.contrib import admin
 
 from .models import (
-    Ingredient, Recipe, Tag,
+    Ingredient, Recipe, Tag, IngredientAmount,
     Favourite, ShoppingCart)
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author',)
-    list_filter = ('name', 'author', 'tags',)
+    list_display = ('name', 'author', 'count_favourite')
+    list_filter = ('author', 'name', 'tags')
+
+    def count_favourite(self, obj):
+        return obj.favourite.count()
 
 
 class IngredientAdmin(admin.ModelAdmin):
@@ -26,3 +29,4 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Favourite)
 admin.site.register(ShoppingCart)
+admin.site.register(IngredientAmount)

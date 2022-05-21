@@ -35,6 +35,9 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
+    def __str__(self):
+        return self.name
+
 
 class Ingredient(models.Model):
     name = models.CharField(
@@ -49,6 +52,9 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+
+    def __str__(self):
+        return self.name
 
 
 class IngredientAmount(models.Model):
@@ -72,6 +78,9 @@ class IngredientAmount(models.Model):
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецепте'
 
+    def __str__(self):
+        return self.ingredient
+
 
 class Tag(models.Model):
     name = models.CharField(
@@ -92,6 +101,9 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+
+    def __str__(self):
+        return self.name
 
 
 class Favourite(models.Model):
@@ -117,6 +129,9 @@ class Favourite(models.Model):
                 name='unique_user_recipe_favourite',
             )]
 
+    def __str__(self):
+        return self.recipe
+
 
 class ShoppingCart(models.Model):
     recipe = models.ForeignKey(
@@ -140,3 +155,6 @@ class ShoppingCart(models.Model):
                 fields=('user', 'recipe',),
                 name='unique_user_recipe_cart',
             )]
+
+    def __str__(self):
+        return self.user
