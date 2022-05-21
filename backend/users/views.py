@@ -45,8 +45,7 @@ class FollowUserViewSet(UserViewSet):
     def subscribe(self, serializer, id=None):
         if self.request.method == 'DELETE':
             return self.user_unsubscribe(serializer, id)
-        else:
-            return self.user_subscribe(serializer, id)
+        return self.user_subscribe(serializer, id)
 
     @action(
         detail=False,

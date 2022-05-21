@@ -1,8 +1,8 @@
 from djoser.serializers import UserSerializer as DjoserUserSerializer
-from recipes.models import Recipe
 from rest_framework import serializers
 
 from .models import Follow, User
+from recipes.models import Recipe
 
 
 class FullUserSerializer(DjoserUserSerializer):
@@ -18,12 +18,9 @@ class FullUserSerializer(DjoserUserSerializer):
         if self.context['request'].user == obj:
             return True
 
-        if Follow.objects.filter(
+        return Follow.objects.filter(
             following=self.context['request'].user,
-            user=obj
-        ):
-            return True
-        return False
+            user=obj).exists
 
     class Meta:
         model = User
@@ -35,12 +32,12 @@ class FullUserSerializer(DjoserUserSerializer):
             )
 
 
-class RecipeCountFollowUserField(serializers.Field):
-    def get_attribute(self, instance):
-        return Recipe.objects.filter(author=instance.following)
+# class RecipeCountFollowUserField(serializers.Field):
+#     def get_attribute(self, instance):
+#         return Recipe.objects.filter(author=instance.following)
 
-    def to_representation(self, recipe_list):
-        return recipe_list.count()
+    # def to_representation(self, recipe_list):
+    #     return recipe_list.count()
 
 
 class RecipeFollowUserField(serializers.Field):
@@ -56,7 +53,12 @@ class FollowUsersSerializer(serializers.ModelSerializer):
     last_name = serializers.ReadOnlyField(source='following.last_name')
     is_subscribed = serializers.ReadOnlyField(default=True)
     recipes = RecipeFollowUserField()
-    recipes_count = RecipeCountFollowUserField()
+    # recipes_count = RecipeCountFollowUserField()
+
+    recipes_count = serializers.IntegerField(
+        source='following.count',
+        read_only=True
+    )
 
     class Meta:
         read_only_fields = (

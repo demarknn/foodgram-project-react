@@ -25,6 +25,8 @@ class IngredientViewSet(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
     pagination_class = None
     permission_classes = [IsOwnerOrReadOnly, ]
+    filter_backends = (IngredientSearchFilter,)
+    search_fields = ('^name',)
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -57,18 +59,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer = FavouriteSerializer(
                                             data=data,
                                             context={'request': request})
-            if not serializer.is_valid():
-                return Response(
-                    serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            serializer.is_valid(raise_exception=True)
+            # if not serializer.is_valid():
+            #     return Response(
+            #         serializer.errors,
+            #         status=status.HTTP_400_BAD_REQUEST
+            #     )
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        elif request.method == 'DELETE':
-            user = request.user
-            recipe = get_object_or_404(Recipe, id=pk)
-            Favourite.objects.filter(user=user, recipe=recipe).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+        user = request.user
+        recipe = get_object_or_404(Recipe, id=pk)
+        Favourite.objects.filter(user=user, recipe=recipe).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ShoppingView(APIView):
@@ -84,11 +86,12 @@ class ShoppingView(APIView):
         context = {'request': request}
         serializer = ShoppingListSerializer(data=data,
                                             context=context)
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        serializer.is_valid(raise_exception=True)
+        # if not serializer.is_valid():
+        #     return Response(
+        #         serializer.errors,
+        #         status=status.HTTP_400_BAD_REQUEST
+        #     )
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
