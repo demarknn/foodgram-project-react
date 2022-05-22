@@ -11,10 +11,9 @@ from rest_framework.pagination import PageNumberPagination
 from .models import (Ingredient, Recipe, Favourite, IngredientAmount,
                      ShoppingCart, Tag)
 from .serializers import (
-                        IngredientSerializer, RecipeSerializer,
-                        TagSerializer, ShoppingListSerializer,
-                        FavouriteSerializer
-                        )
+    IngredientSerializer, RecipeSerializer,
+    TagSerializer, ShoppingListSerializer,
+    FavouriteSerializer)
 from .filters import RecipeFilter, IngredientSearchFilter
 from .permissions import IsOwnerOrReadOnly
 
@@ -57,14 +56,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'user': user.id
             }
             serializer = FavouriteSerializer(
-                                            data=data,
-                                            context={'request': request})
+                data=data,
+                context={'request': request})
             serializer.is_valid(raise_exception=True)
-            # if not serializer.is_valid():
-            #     return Response(
-            #         serializer.errors,
-            #         status=status.HTTP_400_BAD_REQUEST
-            #     )
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         user = request.user
@@ -87,11 +81,6 @@ class ShoppingView(APIView):
         serializer = ShoppingListSerializer(data=data,
                                             context=context)
         serializer.is_valid(raise_exception=True)
-        # if not serializer.is_valid():
-        #     return Response(
-        #         serializer.errors,
-        #         status=status.HTTP_400_BAD_REQUEST
-        #     )
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -127,6 +116,5 @@ class DonwloadShoppingCartViewSet(APIView):
             content_type='text/plain; charset=UTF-8'
         )
         response['Content-Disposition'] = (
-            'attachment; filename=shopping_cart.txt'
-            )
+            'attachment; filename=shopping_cart.txt')
         return response

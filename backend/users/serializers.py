@@ -25,19 +25,8 @@ class FullUserSerializer(DjoserUserSerializer):
     class Meta:
         model = User
         fields = list(DjoserUserSerializer.Meta.fields) + ['is_subscribed']
-        read_only_fields = (
-            list(
-                DjoserUserSerializer.Meta.read_only_fields
-                ) + ['is_subscribed']
-            )
-
-
-# class RecipeCountFollowUserField(serializers.Field):
-#     def get_attribute(self, instance):
-#         return Recipe.objects.filter(author=instance.following)
-
-    # def to_representation(self, recipe_list):
-    #     return recipe_list.count()
+        read_only_fields = list(
+            DjoserUserSerializer.Meta.read_only_fields) + ['is_subscribed']
 
 
 class RecipeFollowUserField(serializers.Field):
@@ -53,8 +42,6 @@ class FollowUsersSerializer(serializers.ModelSerializer):
     last_name = serializers.ReadOnlyField(source='following.last_name')
     is_subscribed = serializers.ReadOnlyField(default=True)
     recipes = RecipeFollowUserField()
-    # recipes_count = RecipeCountFollowUserField()
-
     recipes_count = serializers.IntegerField(
         source='following.count',
         read_only=True
