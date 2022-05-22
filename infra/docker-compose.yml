@@ -1,22 +1,36 @@
 version: '3.3'
 services:
+  db:
+    image: postgres:13.0-alpine
+    restart: always
+    volumes:
+      - postgres_value:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME
+    env_file:
+      - ../backend/.env
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    # build:
+    #   context: ../backend
+    #   dockerfile: Dockerfile
+    image: demarknn/pp_back:v1
+    restart: always
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
-      - frontend
+      - db
     env_file:
       - ../backend/.env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    # build:
+    #   context: ../frontend
+    #   dockerfile: Dockerfile
+    image: demarknn/pp_front:v1
     volumes:
       - ../frontend/:/app/result_build/
 
@@ -38,4 +52,4 @@ services:
 volumes:
   static_value:
   media_value:
-  postgres_data:
+  postgres_value:
