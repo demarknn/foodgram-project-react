@@ -15,7 +15,7 @@ services:
 
   backend:
     image: demarknn/pp_back:latest
-    # restart: always
+    # restart: always 111
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
