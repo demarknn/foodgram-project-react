@@ -38,7 +38,7 @@ jobs:
           uses: docker/build-push-action@v2 
           with:
             push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/pp_back:latest
+            tags: ${{ secrets.DOCKER_USERNAME }}/pp_back:v1
             file: backend/Dockerfile
   deploy:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pp_back:latest
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pp_back:v1
           sudo docker stop $(sudo docker ps -a -q)
 
   send_message:
