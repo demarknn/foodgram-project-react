@@ -19,7 +19,7 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
-        return str(self.user)
+        return str(self.username)
 
 
 class Follow(models.Model):
@@ -47,4 +47,4 @@ class Follow(models.Model):
         verbose_name_plural = 'Подписки'
 
         def __str__(self):
-            return str(self.email)
+            return str(self.user)
