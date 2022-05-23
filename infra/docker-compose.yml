@@ -14,8 +14,8 @@ services:
       - ../backend/.env
 
   backend:
-    image: demarknn/pp_back:v1
-    restart: always
+    image: demarknn/pp_back:latest
+    # restart: always
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
