@@ -51,8 +51,8 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pp_back:v1
           sudo docker stop $(sudo docker ps -a -q)
+          sudo docker compose up -d
 
   send_message:
     runs-on: ubuntu-latest
