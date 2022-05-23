@@ -18,6 +18,9 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+    def __str__(self):
+        return str(self.user)
+
 
 class Follow(models.Model):
     user = models.ForeignKey(
@@ -42,3 +45,6 @@ class Follow(models.Model):
         ]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+
+        def __str__(self):
+            return str(self.email)

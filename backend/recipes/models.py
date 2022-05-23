@@ -54,7 +54,7 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class IngredientAmount(models.Model):
@@ -79,7 +79,7 @@ class IngredientAmount(models.Model):
         verbose_name_plural = 'Ингредиенты в рецепте'
 
     def __str__(self):
-        return self.ingredient
+        return str(self.ingredient)
 
 
 class Tag(models.Model):
@@ -103,7 +103,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class Favourite(models.Model):
@@ -157,4 +157,4 @@ class ShoppingCart(models.Model):
             )]
 
     def __str__(self):
-        return self.user
+        return str(self.user)
