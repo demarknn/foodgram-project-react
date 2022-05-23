@@ -36,7 +36,7 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class Ingredient(models.Model):
@@ -130,7 +130,7 @@ class Favourite(models.Model):
             )]
 
     def __str__(self):
-        return self.recipe
+        return str(self.recipe)
 
 
 class ShoppingCart(models.Model):
