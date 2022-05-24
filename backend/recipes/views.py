@@ -51,25 +51,25 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    @action(detail=True, methods=['post', 'delete'],
-            permission_classes=[permissions.IsAuthenticated, ])
-    def favorite(self, request, pk=None):
-        if request.method == 'POST':
-            user = request.user
-            data = {
-                'recipe': pk,
-                'user': user.id
-            }
-            serializer = FavouriteSerializer(
-                data=data,
-                context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=pk)
-        Favourite.objects.filter(user=user, recipe=recipe).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # @action(detail=True, methods=['post', 'delete'],
+    #         permission_classes=[permissions.IsAuthenticated, ])
+    # def favorite(self, request, pk=None):
+    #     if request.method == 'POST':
+    #         user = request.user
+    #         data = {
+    #             'recipe': pk,
+    #             'user': user.id
+    #         }
+    #         serializer = FavouriteSerializer(
+    #             data=data,
+    #             context={'request': request})
+    #         serializer.is_valid(raise_exception=True)
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     user = request.user
+    #     recipe = get_object_or_404(Recipe, id=pk)
+    #     Favourite.objects.filter(user=user, recipe=recipe).delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ShoppingView(APIView):
