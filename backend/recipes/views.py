@@ -12,9 +12,9 @@ from rest_framework.pagination import PageNumberPagination
 from .models import (Ingredient, Recipe, Favourite, IngredientAmount,
                      ShoppingCart, Tag)
 from .serializers import (
-    IngredientSerializer, RecipePostSerializer,
+    IngredientSerializer, RecipeSerializer,
     TagSerializer, ShoppingListSerializer,
-    FavouriteSerializer, RecipeListSerializer)
+    FavouriteSerializer)
 from .filters import RecipeFilter, IngredientSearchFilter
 from .permissions import IsOwnerOrReadOnly
 
@@ -38,15 +38,16 @@ class TagViewSet(viewsets.ModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = RecipeFilter
     pagination_class = PageNumberPagination
     permission_classes = [IsOwnerOrReadOnly, ]
 
-    def get_serializer_class(self):
-        if self.request.method in SAFE_METHODS:
-            return RecipeListSerializer
-        return RecipePostSerializer
+    # def get_serializer_class(self):
+    #     if self.request.method in SAFE_METHODS:
+    #         return RecipeListSerializer
+    #     return RecipePostSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
