@@ -2,10 +2,10 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets, permissions
-from rest_framework.permissions import SAFE_METHODS
+# from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import action
+# from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 
@@ -14,7 +14,7 @@ from .models import (Ingredient, Recipe, Favourite, IngredientAmount,
 from .serializers import (
     IngredientSerializer, RecipeSerializer,
     TagSerializer, ShoppingListSerializer,
-    FavouriteSerializer)
+    ) #FavouriteSerializer
 from .filters import RecipeFilter, IngredientSearchFilter
 from .permissions import IsOwnerOrReadOnly
 
