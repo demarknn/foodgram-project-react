@@ -36,7 +36,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 
-class RecipeListSerializer(serializers.ModelSerializer):
+class RecipeSerializer(serializers.ModelSerializer):
 
     tags = TagSerializer(read_only=True, many=True)
     author = FullUserSerializer(read_only=True)

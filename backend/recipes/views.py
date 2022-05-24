@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from .models import (Ingredient, Recipe, Favourite, IngredientAmount,
                      ShoppingCart, Tag)
 from .serializers import (
-    IngredientSerializer, RecipePostSerializer, RecipeListSerializer, 
+    IngredientSerializer, RecipePostSerializer, RecipeSerializer, 
     TagSerializer, ShoppingListSerializer, FavouriteSerializer
     )
 from .filters import RecipeFilter, IngredientSearchFilter
@@ -46,7 +46,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
-            return RecipeListSerializer
+            return RecipeSerializer
         return RecipePostSerializer
 
     def perform_create(self, serializer):
