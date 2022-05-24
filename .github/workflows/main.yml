@@ -39,20 +39,20 @@ jobs:
             push: true
             tags: ${{ secrets.DOCKER_USERNAME }}/pp_back:latest
             file: backend/Dockerfile
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build_and_push_to_docker_hub
-    steps:
-    - name: executing remote ssh commands to deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          sudo docker stop $(sudo docker ps -a -q)
-          sudo docker container rm demark-backend-1
-          sudo docker compose up -d
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build_and_push_to_docker_hub
+  #   steps:
+  #   - name: executing remote ssh commands to deploy
+  #     uses: appleboy/ssh-action@master
+  #     with:
+  #       host: ${{ secrets.HOST }}
+  #       username: ${{ secrets.USER }}
+  #       key: ${{ secrets.SSH_KEY }}
+  #       script: |
+  #         sudo docker stop $(sudo docker ps -a -q)
+  #         sudo docker container rm demark-backend-1
+  #         sudo docker compose up -d
 
   send_message:
     runs-on: ubuntu-latest

@@ -2,7 +2,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets, permissions
-#from rest_framework.permissions import SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from .models import (Ingredient, Recipe, Favourite, IngredientAmount,
                      ShoppingCart, Tag)
 from .serializers import (
-    IngredientSerializer, RecipeSerializer,
+    IngredientSerializer, RecipePostSerializer, RecipeListSerializer, 
     TagSerializer, ShoppingListSerializer, FavouriteSerializer
     )
 from .filters import RecipeFilter, IngredientSearchFilter
@@ -44,10 +44,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     permission_classes = [IsOwnerOrReadOnly, ]
 
-    # def get_serializer_class(self):
-    #     if self.request.method in SAFE_METHODS:
-    #         return RecipeListSerializer
-    #     return RecipePostSerializer
+    def get_serializer_class(self):
+        if self.request.method in SAFE_METHODS:
+            return RecipeListSerializer
+        return RecipePostSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
