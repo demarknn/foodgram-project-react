@@ -105,9 +105,9 @@ class RecipePostSerializer(serializers.ModelSerializer):
 
 
 class RecipeListSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(read_only=True, many=True)
-    author = FullUserSerializer(read_only=True)
-    ingredients = IngredientAmountSerializer(required=True, many=True)
+    # tags = TagSerializer(read_only=True, many=True)
+    # author = FullUserSerializer(read_only=True)
+    # ingredients = IngredientAmountSerializer(required=True, many=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -116,9 +116,8 @@ class RecipeListSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'tags', 'author', 'ingredients',
             'is_favorited', 'is_in_shopping_cart',
-            'name', 'text', 'cooking_time'
-        ) 
-        # 'image', 
+            'name', 'image', 'text', 'cooking_time'
+        )
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
