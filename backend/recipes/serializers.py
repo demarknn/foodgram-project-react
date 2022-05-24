@@ -38,7 +38,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
 
-    tags = TagSerializer(read_only=True, many=True)
+    #tags = TagSerializer(read_only=True, many=True)
     #author = FullUserSerializer(read_only=True)
     #ingredients = IngredientAmountSerializer(required=True, many=True)
     # is_favorited = serializers.SerializerMethodField()
