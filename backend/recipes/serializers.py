@@ -34,12 +34,12 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    image = Base64ImageField(use_url=True, max_length=None)
+    #image = Base64ImageField(use_url=True, max_length=None)
     #tags = TagSerializer(read_only=True, many=True)
     #author = FullUserSerializer(read_only=True)
     ingredients = IngredientAmountSerializer(required=True, many=True)
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
+    #is_favorited = serializers.SerializerMethodField()
+    #is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
