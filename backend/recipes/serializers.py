@@ -33,8 +33,8 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
 
 
-class RecipeSerializer(serializers.ModelSerializer):
-    #image = Base64ImageField(use_url=True, max_length=None)
+class RecipePostSerializer(serializers.ModelSerializer):
+    image = Base64ImageField(use_url=True, max_length=None)
     tags = TagSerializer(read_only=True, many=True)
     author = FullUserSerializer(read_only=True)
     ingredients = IngredientAmountSerializer(required=True, many=True)
@@ -46,18 +46,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
                   'is_in_shopping_cart', 'name', 'image', 'text',
                   'cooking_time')
-
-    def get_is_favorited(self, obj):
-        user = self.context.get('request').user
-        if user.is_anonymous:
-            return False
-        return Recipe.objects.filter(favourite__user=user, id=obj.id).exists()
-
-    def get_is_in_shopping_cart(self, obj):
-        user = self.context.get('request').user
-        if user.is_anonymous:
-            return False
-        return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
@@ -111,6 +99,34 @@ class RecipeSerializer(serializers.ModelSerializer):
         self.create_ingredients(validated_data.get('ingredients'), instance)
         instance.save()
         return instance
+
+
+class RecipeListSerializer(serializers.ModelSerializer):
+    author = FullUserSerializer(read_only=True)
+    tags = TagSerializer(read_only=True, many=True)
+    ingredients = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Recipe
+        fields = (
+            'id', 'tags', 'author', 'ingredients',
+            'is_favorited', 'is_in_shopping_cart',
+            'name', 'image', 'text', 'cooking_time'
+        )
+
+    def get_is_favorited(self, obj):
+        user = self.context.get('request').user
+        if user.is_anonymous:
+            return False
+        return Recipe.objects.filter(favourite__user=user, id=obj.id).exists()
+
+    def get_is_in_shopping_cart(self, obj):
+        user = self.context.get('request').user
+        if user.is_anonymous:
+            return False
+        return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
 
 class FavouriteSerializer(serializers.ModelSerializer):
