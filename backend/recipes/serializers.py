@@ -43,9 +43,12 @@ class RecipePostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
-                  'is_in_shopping_cart', 'name', 'image', 'text',
+        fields = ('id', 'tags', 'author', 'ingredients',
+                  'name', 'image', 'text',
                   'cooking_time')
+        # fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
+        #           'is_in_shopping_cart', 'name', 'image', 'text',
+        #           'cooking_time')
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
