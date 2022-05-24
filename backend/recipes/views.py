@@ -38,33 +38,33 @@ class TagViewSet(viewsets.ModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    #filter_backends = [DjangoFilterBackend, ]
-    #filterset_class = RecipeFilter
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_class = RecipeFilter
     pagination_class = PageNumberPagination
     permission_classes = [IsOwnerOrReadOnly, ]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    @action(detail=True, methods=['post', 'delete'],
-            permission_classes=[permissions.IsAuthenticated, ])
-    def favorite(self, request, pk=None):
-        if request.method == 'POST':
-            user = request.user
-            data = {
-                'recipe': pk,
-                'user': user.id
-            }
-            serializer = FavouriteSerializer(
-                data=data,
-                context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=pk)
-        Favourite.objects.filter(user=user, recipe=recipe).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # @action(detail=True, methods=['post', 'delete'],
+    #         permission_classes=[permissions.IsAuthenticated, ])
+    # def favorite(self, request, pk=None):
+    #     if request.method == 'POST':
+    #         user = request.user
+    #         data = {
+    #             'recipe': pk,
+    #             'user': user.id
+    #         }
+    #         serializer = FavouriteSerializer(
+    #             data=data,
+    #             context={'request': request})
+    #         serializer.is_valid(raise_exception=True)
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     user = request.user
+    #     recipe = get_object_or_404(Recipe, id=pk)
+    #     Favourite.objects.filter(user=user, recipe=recipe).delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ShoppingView(APIView):
