@@ -22,15 +22,15 @@ class FullUserSerializer(DjoserUserSerializer):
             following=self.context['request'].user,
             user=obj).exists
 
-    class Meta:
-        model = User
-        fields = '__all__'
-
     # class Meta:
     #     model = User
-    #     fields = list(DjoserUserSerializer.Meta.fields) + ['is_subscribed']
-    #     read_only_fields = list(
-    #         DjoserUserSerializer.Meta.read_only_fields) + ['is_subscribed']
+    #     fields = '__all__'
+
+    class Meta:
+        model = User
+        fields = list(DjoserUserSerializer.Meta.fields) + ['is_subscribed']
+        read_only_fields = list(
+            DjoserUserSerializer.Meta.read_only_fields) + ['is_subscribed']
 
 class RecipeFollowUserField(serializers.Field):
     def get_attribute(self, instance):
