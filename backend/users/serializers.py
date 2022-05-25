@@ -5,18 +5,18 @@ from rest_framework.validators import UniqueValidator
 
 from .models import Follow, User
 from recipes.models import Recipe
-from recipes.serializers import CropRecipeSerializer
-
-from drf_extra_fields.fields import Base64ImageField
 
 
-class CropRecipeSerializer(serializers.ModelSerializer):
-    image = Base64ImageField()
+# from drf_extra_fields.fields import Base64ImageField
 
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
-        read_only_fields = ('id', 'name', 'image', 'cooking_time')
+
+# class CropRecipeSerializer(serializers.ModelSerializer):
+#     image = Base64ImageField()
+
+#     class Meta:
+#         model = Recipe
+#         fields = ('id', 'name', 'image', 'cooking_time')
+#         read_only_fields = ('id', 'name', 'image', 'cooking_time')
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
@@ -54,6 +54,10 @@ class FullUserSerializer(UserSerializer):
         return Follow.objects.filter(user=user, following=obj.id).exists()
 
 
+class RecipeFollowUserField(serializers.Field):
+    def get_attribute(self, instance):
+        return Recipe.objects.filter(author=instance.following)
+        
 
 class FollowUsersSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='following.id')
@@ -62,7 +66,8 @@ class FollowUsersSerializer(serializers.ModelSerializer):
     first_name = serializers.ReadOnlyField(source='following.first_name')
     last_name = serializers.ReadOnlyField(source='following.last_name')
     is_subscribed = serializers.SerializerMethodField()
-    recipes = serializers.SerializerMethodField()
+    #recipes = serializers.SerializerMethodField()
+    recipes = RecipeFollowUserField()
     recipes_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -75,16 +80,18 @@ class FollowUsersSerializer(serializers.ModelSerializer):
             user=obj.user, following=obj.following
         ).exists()
 
-    def get_recipes(self, obj):
-        request = self.context.get('request')
-        limit = request.GET.get('recipes_limit')
-        queryset = Recipe.objects.filter(author=obj.following)
-        if limit:
-            queryset = queryset[:int(limit)]
-        return CropRecipeSerializer(queryset, many=True).data
+    # def get_recipes(self, obj):
+    #     request = self.context.get('request')
+    #     limit = request.GET.get('recipes_limit')
+    #     queryset = Recipe.objects.filter(author=obj.following)
+    #     if limit:
+    #         queryset = queryset[:int(limit)]
+    #     return CropRecipeSerializer(queryset, many=True).data
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj.following).count()
+
+
 
 
 
