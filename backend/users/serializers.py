@@ -12,42 +12,37 @@ class FullUserSerializer(DjoserUserSerializer):
     )
 
     def check_is_subscribed(self, obj):
-        #if self.context['request'].user.is_anonymous:
-        if self.context.get('request').user.is_anonymous:
+        if self.context['request'].user.is_anonymous:
             return False
 
-        #if self.context['request'].user == obj:
-        if self.context.get('request').user == obj:
+        if self.context['request'].user == obj:
             return True
 
         return Follow.objects.filter(
-            following=self.context.get('request').user,
+            following=self.context['request'].user,
             user=obj).exists
-#following=self.context['request'].user,
 
     class Meta:
         model = User
         fields = list(DjoserUserSerializer.Meta.fields) + ['is_subscribed']
-        read_only_fields = list(
-            DjoserUserSerializer.Meta.read_only_fields) + ['is_subscribed']
+        read_only_fields = (
+            list(
+                DjoserUserSerializer.Meta.read_only_fields
+                ) + ['is_subscribed']
+            )
 
 
-class FollowUserField(serializers.Field):
+# class RecipeCountFollowUserField(serializers.Field):
+#     def get_attribute(self, instance):
+#         return Recipe.objects.filter(author=instance.following)
+
+    # def to_representation(self, recipe_list):
+    #     return recipe_list.count()
+
+
+class RecipeFollowUserField(serializers.Field):
     def get_attribute(self, instance):
         return Recipe.objects.filter(author=instance.following)
-
-    def to_representation(self, recipe_list):
-        recipe_data = []
-        for recipe in recipe_list:
-            recipe_data.append(
-                {
-                    "id": recipe.id,
-                    "name": recipe.name,
-                    "image": recipe.image.url,
-                    "cooking_time": recipe.cooking_time,
-                }
-            )
-        return recipe_data
 
 
 class FollowUsersSerializer(serializers.ModelSerializer):
@@ -57,7 +52,9 @@ class FollowUsersSerializer(serializers.ModelSerializer):
     first_name = serializers.ReadOnlyField(source='following.first_name')
     last_name = serializers.ReadOnlyField(source='following.last_name')
     is_subscribed = serializers.ReadOnlyField(default=True)
-    recipes = FollowUserField()
+    recipes = RecipeFollowUserField()
+    # recipes_count = RecipeCountFollowUserField()
+
     recipes_count = serializers.IntegerField(
         source='following.count',
         read_only=True
