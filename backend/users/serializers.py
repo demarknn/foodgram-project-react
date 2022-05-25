@@ -57,7 +57,20 @@ class FullUserSerializer(UserSerializer):
 class RecipeFollowUserField(serializers.Field):
     def get_attribute(self, instance):
         return Recipe.objects.filter(author=instance.following)
-        
+
+    def to_representation(self, recipe_list):
+        recipe_data = []
+        for recipe in recipe_list:
+            recipe_data.append(
+                {
+                    "id": recipe.id,
+                    "name": recipe.name,
+                    "image": recipe.image.url,
+                    "cooking_time": recipe.cooking_time,
+                }
+            )
+        return recipe_data
+
 
 class FollowUsersSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='following.id')
