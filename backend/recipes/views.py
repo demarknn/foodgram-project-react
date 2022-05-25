@@ -70,6 +70,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class ShoppingView(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
     filterset_class = RecipeFilter
+    pagination_class = PageNumberPagination
 
     def post(self, request, pk):
         user = request.user
