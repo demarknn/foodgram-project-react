@@ -38,7 +38,7 @@ class TagSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     author = FullUserSerializer(read_only=True)
     image = Base64ImageField()
-    ingredients = IngredientAmount(required=True, many=True)
+    ingredients = IngredientAmount(many=True)
     tags = serializers.PrimaryKeyRelatedField(
         many=True,
         read_only=False,
