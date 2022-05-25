@@ -107,7 +107,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             'is_in_shopping_cart'
         )
         model = Recipe
-        #read_only_fields = ('author', 'is_favorited', 'is_in_shopping_cart')
+        read_only_fields = ('author', 'is_favorited', 'is_in_shopping_cart')
 
 
 # class RecipeSerializer(serializers.ModelSerializer):
