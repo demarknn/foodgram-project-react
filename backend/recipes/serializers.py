@@ -36,9 +36,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
- """
-    Data serializer for the Recipe model.
-    """
+
     image = Base64ImageField()
     author = FullUserSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
