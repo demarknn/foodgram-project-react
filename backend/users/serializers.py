@@ -5,9 +5,19 @@ from rest_framework.validators import UniqueValidator
 
 from .models import Follow, User
 from recipes.models import Recipe
-from recipes.serializers import CropRecipeSerializer
+#from recipes.serializers import CropRecipeSerializer
 
-#dfssdfdf
+from drf_extra_fields.fields import Base64ImageField
+
+
+class CropRecipeSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
+        read_only_fields = ('id', 'name', 'image', 'cooking_time')
+
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     email = serializers.EmailField(
