@@ -12,18 +12,19 @@ class FullUserSerializer(DjoserUserSerializer):
     )
 
     def check_is_subscribed(self, obj):
-        #if self.context['request'].user.is_anonymous:
-        if self.context.get('request').user.is_anonymous:
+        if self.context['request'].user.is_anonymous:
+        #if self.context.get('request').user.is_anonymous:
             return False
 
-        #if self.context['request'].user == obj:
-        if self.context.get('request').user == obj:
+        if self.context['request'].user == obj:
+        #if self.context.get('request').user == obj:
             return True
 
         return Follow.objects.filter(
-            following=self.context.get('request').user,
+            following=self.context['request'].user,
             user=obj).exists
 #following=self.context['request'].user,
+
     class Meta:
         model = User
         fields = list(DjoserUserSerializer.Meta.fields) + ['is_subscribed']
