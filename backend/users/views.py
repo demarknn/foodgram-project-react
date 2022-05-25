@@ -13,37 +13,36 @@ from .serializers import FollowUsersSerializer
 
 
 class FollowUserViewSet(UserViewSet):
-    #pagination_class = LimitPageNumberPagination
 
-    @action(detail=True, permission_classes=[permissions.IsAuthenticated])
+    @action(methods=['post'], detail=True, permission_classes=[permissions.IsAuthenticated])
     def subscribe(self, request, id=None):
         user = request.user
-        author = get_object_or_404(User, id=id)
+        following = get_object_or_404(User, id=id)
 
-        if user == author:
+        if user == following:
             return Response({
                 'errors': 'Вы не можете подписываться на самого себя'
             }, status=status.HTTP_400_BAD_REQUEST)
-        if Follow.objects.filter(user=user, author=author).exists():
+        if Follow.objects.filter(user=user, following=following).exists():
             return Response({
                 'errors': 'Вы уже подписаны на данного пользователя'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        follow = Follow.objects.create(user=user, author=author)
+        follow = Follow.objects.create(user=user, following=following)
         serializer = FollowUsersSerializer(
             follow, context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @subscribe.mapping.delete
+    @action(methods=['post', 'delete'], detail=True, permission_classes=[permissions.IsAuthenticated])
     def del_subscribe(self, request, id=None):
         user = request.user
-        author = get_object_or_404(User, id=id)
-        if user == author:
+        following = get_object_or_404(User, id=id)
+        if user == following:
             return Response({
                 'errors': 'Вы не можете отписываться от самого себя'
             }, status=status.HTTP_400_BAD_REQUEST)
-        follow = Follow.objects.filter(user=user, author=author)
+        follow = Follow.objects.filter(user=user, following=following)
         if follow.exists():
             follow.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -52,7 +51,7 @@ class FollowUserViewSet(UserViewSet):
             'errors': 'Вы уже отписались'
         }, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, permission_classes=[permissions.IsAuthenticated])
+    @action(methods=['get'], detail=True, permission_classes=[permissions.IsAuthenticated])
     def subscriptions(self, request):
         user = request.user
         queryset = Follow.objects.filter(user=user)
