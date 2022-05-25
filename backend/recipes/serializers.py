@@ -75,7 +75,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     def check_is_favorited(self, obj):
-        current_user = self.context['request'].user
+        current_user = self.context.get('request').user
         if current_user.is_anonymous:
             return False
 
@@ -85,7 +85,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         ).exists()
 
     def check_is_in_shopping_cart(self, obj):
-        current_user = self.context['request'].user
+        current_user = self.context.get('request').user
         if current_user.is_anonymous:
             return False
 
