@@ -49,11 +49,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[permissions.IsAuthenticated, ])
-    def favorite(self, request, pk=None):
+    def favorite(self, request, favorite_id):
         if request.method == 'POST':
             user = request.user
             data = {
-                'recipe': pk,
+                'recipe': favorite_id,
                 'user': user.id
             }
             serializer = FavouriteSerializer(
@@ -63,7 +63,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         user = request.user
-        recipe = get_object_or_404(Recipe, id=pk)
+        recipe = get_object_or_404(Recipe, id=favorite_id)
         Favourite.objects.filter(user=user, recipe=recipe).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
