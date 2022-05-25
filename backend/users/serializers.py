@@ -7,7 +7,7 @@ from .models import Follow, User
 from recipes.models import Recipe
 from recipes.serializers import CropRecipeSerializer
 
-
+#dfssdfdf
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     email = serializers.EmailField(
