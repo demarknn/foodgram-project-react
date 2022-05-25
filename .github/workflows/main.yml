@@ -51,6 +51,7 @@ jobs:
   #       key: ${{ secrets.SSH_KEY }}
   #       script: |
   #         sudo docker stop $(sudo docker ps -a -q)
+
   #         sudo docker compose up -d
 
   send_message:
