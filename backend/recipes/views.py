@@ -49,7 +49,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[permissions.IsAuthenticated, ])
-    def favorite(self, request, pk):
+    def favorites(self, request, pk):
         if request.method == 'POST':
             user = request.user
             data = {
