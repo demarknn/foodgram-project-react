@@ -24,14 +24,14 @@ class RecipeFilter(filters.FilterSet):
     )
 
     def filter_is_favorited(self, queryset, name, value):
-        if value == True:
+        if value:
             return queryset.filter(favouriterecipe__user=self.request.user)
-       # return queryset
+        return queryset
 
     def filter_is_in_shopping_cart(self, queryset, name, value):
-        if value == True:
+        if value:
             return queryset.filter(cartrecipe__user=self.request.user)
-        #return queryset
+        return queryset
 
     class Meta:
         model = Recipe
