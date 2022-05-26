@@ -14,7 +14,7 @@ from .serializers import (
     IngredientSerializer, RecipeSerializer,
     TagSerializer, ShoppingListSerializer,
     FavouriteSerializer)
-from .filters import IngredientSearchFilter  # RecipeFilter, 
+from .filters import IngredientSearchFilter, RecipeFilter
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -39,7 +39,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend, ]
-    # filterset_class = RecipeFilter
+    filterset_class = RecipeFilter
     pagination_class = PageNumberPagination
     pagination_class.page_size = 6
     permission_classes = [IsOwnerOrReadOnly, ]
