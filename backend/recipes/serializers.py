@@ -43,25 +43,22 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited', 'is_in_shopping_cart',
-                  'name', 'image', 'text', 'cooking_time')
-    # 
+        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
+                  'name', 'image', 'text', 'is_in_shopping_cart',
+                  'cooking_time')
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
         if request.user.is_anonymous:
             return False
         return Favourite.objects.filter(recipe=obj, user=request.user).exists()
-        #return Recipe.objects.filter(
-        #    favourite_recipe__user=user, id=obj.id).exists()   self.context.get('request').user
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
         if request.user.is_anonymous:
             return False
-        return ShoppingCart.objects.filter(recipe=obj, user=request.user).exists()
-        #return Recipe.objects.filter(
-        #    cart_recipe__user=user, id=obj.id).exists()
+        return ShoppingCart.objects.filter(
+            recipe=obj, user=request.user).exists()
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
@@ -78,7 +75,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             ingredient_list.append(ingredient)
             if int(ingredient_item['amount']) <= 0:
                 raise serializers.ValidationError({
-                    'amount':['Убедитесь, что количество больше либо равно 1.']
+                    'amount': [
+                        'Убедитесь, что количество больше либо равно 1']
                 })
         data['ingredients'] = ingredients
         return data
