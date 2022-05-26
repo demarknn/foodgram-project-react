@@ -49,7 +49,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[permissions.IsAuthenticated, ])
-    def favorites(self, request, pk):
+    def favorite(self, request, pk):
         if request.method == 'POST':
             user = request.user
             data = {
@@ -70,7 +70,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class ShoppingView(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
-    # filterset_class = RecipeFilter
+    filterset_class = RecipeFilter
     pagination_class = None
 
     def post(self, request, pk):

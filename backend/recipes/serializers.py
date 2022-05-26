@@ -78,7 +78,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             ingredient_list.append(ingredient)
             if int(ingredient_item['amount']) < 0:
                 raise serializers.ValidationError({
-                    "amount":["Убедитесь, что это значение больше либо равно 1."]
+                    'amount':['Убедитесь, что это значение больше либо равно 1.']
                 })
         data['ingredients'] = ingredients
         return data
