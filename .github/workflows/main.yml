@@ -52,7 +52,7 @@ jobs:
         # passphrase: ${{ secrets.SERVER_PASSPHRASE }}   sudo docker stop $(sudo docker ps -a -q)  sudo docker rm pp_backend_1
         script: |
       
-          
+          cd ../infra/
           sudo docker-compose up -d
   send_message:
     runs-on: ubuntu-latest
