@@ -52,7 +52,7 @@ jobs:
         # passphrase: ${{ secrets.SERVER_PASSPHRASE }}   123123
         script: |
           sudo docker stop $(sudo docker ps -a -q)
-          sudo docker rm demark-backend-1
+          sudo docker rm pp_backend_1
           sudo docker compose up -d
   send_message:
     runs-on: ubuntu-latest
