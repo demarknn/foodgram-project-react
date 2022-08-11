@@ -49,7 +49,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
-        # passphrase: ${{ secrets.SERVER_PASSPHRASE }}
+        # passphrase: ${{ secrets.SERVER_PASSPHRASE }}   123123
         script: |
           sudo docker stop $(sudo docker ps -a -q)
           sudo docker rm demark-backend-1
